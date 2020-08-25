@@ -56,6 +56,9 @@ SkeletalAnimation::SkeletalAnimation(Context* context) :
 
 void SkeletalAnimation::Start()
 {
+    //context_->GetRenderer()->SetShadowQuality(SHADOWQUALITY_BLUR_VSM);
+    //context_->GetRenderer()->SetShadowQuality(SHADOWQUALITY_VSM);
+
     // Execute base class startup
     Sample::Start();
 

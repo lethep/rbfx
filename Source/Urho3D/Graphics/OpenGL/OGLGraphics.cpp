@@ -1043,7 +1043,7 @@ ConstantBufferLayout* Graphics::GetConstantBufferLayout(ShaderVariation* vs, Sha
     if (iter != impl_->shaderPrograms_.end())
         return iter->second;
 
-    // TODO: Some overhead due to redundant setting of shader program
+    // TODO(renderer): Some overhead due to redundant setting of shader program
     ShaderVariation* prevVertexShader = vertexShader_;
     ShaderVariation* prevPixelShader = pixelShader_;
     SetShaders(vs, ps);
@@ -3255,10 +3255,6 @@ void Graphics::ResetCachedState()
         SetDepthTest(CMP_LESSEQUAL);
         SetDepthWrite(true);
     }
-
-    /*for (auto& constantBuffer : impl_->constantBuffers_)
-        constantBuffer = nullptr;
-    impl_->dirtyConstantBuffers_.clear();*/
 }
 
 void Graphics::SetTextureUnitMappings()
