@@ -366,7 +366,11 @@ void CustomView::Render()
     }
 
     sceneViewport->SetOutputRenderTarget();
+#ifdef URHO3D_OPENGL
     graphics_->Clear(CLEAR_COLOR | CLEAR_DEPTH | CLEAR_STENCIL, Color::RED * 0.5f);
+#else
+    graphics_->Clear(CLEAR_COLOR | CLEAR_DEPTH | CLEAR_STENCIL, Color::GREEN * 0.5f);
+#endif
 
     drawQueue.Reset(graphics_);
 

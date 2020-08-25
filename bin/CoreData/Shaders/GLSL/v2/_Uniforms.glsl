@@ -1,12 +1,12 @@
 #ifndef _UNIFORMS_GLSL_
 #define _UNIFORMS_GLSL_
 
-CBUFFER_BEGIN(Frame)
+CBUFFER_BEGIN(0, Frame)
     CBUFFER_UNIFORM(float cDeltaTime)
     CBUFFER_UNIFORM(float cElapsedTime)
 CBUFFER_END()
 
-CBUFFER_BEGIN(Camera)
+CBUFFER_BEGIN(1, Camera)
     CBUFFER_UNIFORM(vec3 cCameraPos)
     CBUFFER_UNIFORM(float cNearClip)
     CBUFFER_UNIFORM(float cFarClip)
@@ -21,13 +21,13 @@ CBUFFER_BEGIN(Camera)
     CBUFFER_UNIFORM(vec2 cGBufferInvSize)
 CBUFFER_END()
 
-CBUFFER_BEGIN(Zone)
+CBUFFER_BEGIN(2, Zone)
     CBUFFER_UNIFORM(vec4 cAmbientColor)
     CBUFFER_UNIFORM(vec4 cFogParams)
     CBUFFER_UNIFORM(vec3 cFogColor)
 CBUFFER_END()
 
-CBUFFER_BEGIN(Light)
+CBUFFER_BEGIN(3, Light)
     CBUFFER_UNIFORM(vec4 cLightPos)
     CBUFFER_UNIFORM(vec3 cLightDir)
     CBUFFER_UNIFORM(vec4 cNormalOffsetScale)
@@ -53,7 +53,7 @@ CBUFFER_BEGIN(Light)
 CBUFFER_END()
 
 #ifndef CUSTOM_MATERIAL_CBUFFER
-CBUFFER_BEGIN(Material)
+CBUFFER_BEGIN(4, Material)
     CBUFFER_UNIFORM(vec4 cUOffset)
     CBUFFER_UNIFORM(vec4 cVOffset)
     CBUFFER_UNIFORM(vec4 cLMOffset)
@@ -70,7 +70,7 @@ CBUFFER_END()
 #endif
 
 #ifdef COMPILEVS
-CBUFFER_BEGIN(Object)
+CBUFFER_BEGIN(5, Object)
     CBUFFER_UNIFORM(mat3x4 cModel)
 #ifdef SPHERICALHARMONICS
     CBUFFER_UNIFORM(vec4 cSHAr)

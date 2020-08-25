@@ -25,6 +25,7 @@
 #include "../../Graphics/Graphics.h"
 #include "../../Graphics/GraphicsImpl.h"
 #include "../../Graphics/Shader.h"
+#include "../../Graphics/ShaderConverter.h"
 #include "../../Graphics/VertexBuffer.h"
 #include "../../IO/File.h"
 #include "../../IO/FileSystem.h"
@@ -234,7 +235,7 @@ bool ShaderVariation::LoadByteCode(const ea::string& binaryShaderName)
 
 bool ShaderVariation::Compile()
 {
-    const ea::string& sourceCode = owner_->GetSourceCode(type_);
+    const ea::string& glslSourceCode = owner_->GetSourceCode(type_);
     ea::vector<ea::string> defines = defines_.split(' ');
 
     // Set the entrypoint, profile and flags according to the shader being compiled
@@ -242,29 +243,54 @@ bool ShaderVariation::Compile()
     const char* profile = nullptr;
     unsigned flags = D3DCOMPILE_OPTIMIZATION_LEVEL3;
 
-    defines.emplace_back("D3D11");
+    // TODO(renderer): Cleanup this mess
+    //defines.emplace_back("D3D11");
 
     if (type_ == VS)
     {
         entryPoint = "VS";
-        defines.emplace_back("COMPILEVS");
+        // TODO(renderer): Cleanup this mess
+        //defines.emplace_back("COMPILEVS");
         profile = "vs_4_0";
     }
     else
     {
         entryPoint = "PS";
-        defines.emplace_back("COMPILEPS");
+        // TODO(renderer): Cleanup this mess
+        //defines.emplace_back("COMPILEPS");
         profile = "ps_4_0";
         flags |= D3DCOMPILE_PREFER_FLOW_CONTROL;
     }
 
-    defines.emplace_back("MAXBONES=" + ea::to_string(Graphics::GetMaxBones()));
+    // TODO(renderer): Cleanup this mess
+    //defines.emplace_back("MAXBONES=" + ea::to_string(Graphics::GetMaxBones()));
+
+    // TODO(renderer): Cleanup this mess
+    entryPoint = "main";
+    ShaderCache cache(owner_->GetContext());
+    ShaderDefinesVector parsedDefines;
+    for (unsigned i = 0; i < defines.size(); ++i)
+    {
+        unsigned equalsPos = defines[i].find('=');
+        if (equalsPos != ea::string::npos)
+            parsedDefines.emplace_back(defines[i].substr(0, equalsPos), defines[i].substr(equalsPos + 1));
+        else
+            parsedDefines.emplace_back(defines[i], "1");
+    }
+    const ea::string& sourceCode = cache.ConvertShader(glslSourceCode, type_, ShaderVersion::DX11, parsedDefines);
+    if (sourceCode.empty())
+    {
+        URHO3D_LOGERROR("Failed to convert");
+        return false;
+    }
+    //URHO3D_LOGINFO("{}", glslSourceCode.c_str());
+    //URHO3D_LOGINFO("{}", sourceCode.c_str());
 
     // Collect defines into macros
     ea::vector<ea::string> defineValues;
     ea::vector<D3D_SHADER_MACRO> macros;
 
-    for (unsigned i = 0; i < defines.size(); ++i)
+/*    for (unsigned i = 0; i < defines.size(); ++i)
     {
         unsigned equalsPos = defines[i].find('=');
         if (equalsPos != ea::string::npos)
@@ -287,7 +313,7 @@ bool ShaderVariation::Compile()
         if (sourceCode.find(defines[i]) == ea::string::npos)
             URHO3D_LOGWARNING("Shader " + GetFullName() + " does not use the define " + defines[i]);
 #endif
-    }
+    }*/
 
     D3D_SHADER_MACRO endMacro;
     endMacro.Name = nullptr;
@@ -392,9 +418,10 @@ void ShaderVariation::ParseParameters(unsigned char* bufData, unsigned bufSize)
             D3D11_SHADER_VARIABLE_DESC varDesc;
             var->GetDesc(&varDesc);
             ea::string varName(varDesc.Name);
-            if (varName[0] == 'c')
+            const auto nameStart = varName.find('c');
+            if (nameStart != ea::string::npos)
             {
-                varName = varName.substr(1); // Strip the c to follow Urho3D constant naming convention
+                varName = varName.substr(nameStart + 1); // Strip the c to follow Urho3D constant naming convention
                 parameters_[varName] = ShaderParameter{type_, varName, varDesc.StartOffset, varDesc.Size, cbRegister};
             }
         }

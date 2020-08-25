@@ -916,7 +916,7 @@ void UI::Render(VertexBuffer* buffer, const ea::vector<UIBatch>& batches, unsign
     // Engine does not render when window is closed or device is lost
     assert(graphics_ && graphics_->IsInitialized() && !graphics_->IsDeviceLost());
 
-    if (batches.empty())
+    //if (batches.empty())
         return;
 
     unsigned alphaFormat = Graphics::GetAlphaFormat();

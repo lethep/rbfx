@@ -25,8 +25,10 @@
 #include "../../Graphics/Graphics.h"
 #include "../../Graphics/GraphicsImpl.h"
 #include "../../Graphics/Shader.h"
+#include "../../Graphics/ShaderConverter.h"
 #include "../../Graphics/ShaderProgram.h"
 #include "../../Graphics/ShaderVariation.h"
+#include "../../IO/FileSystem.h"
 #include "../../IO/Log.h"
 
 #include "../../DebugNew.h"
@@ -179,6 +181,23 @@ bool ShaderVariation::Create()
         shaderCode += (originalShaderCode.c_str() + verEnd);
     else
         shaderCode += originalShaderCode;
+
+    {
+        ShaderCache cache(owner_->GetContext());
+        const ea::string resourceName = GetFileName(owner_->GetName());
+        ShaderDefinesVector defines;
+    #ifdef MOBILE_GRAPHICS
+        const ShaderVersion shaderVersion = Graphics::GetGL3Support() ? ShaderVersion::GLES3 : ShaderVersion::GLES2;
+    #else
+        const ShaderVersion shaderVersion = Graphics::GetGL3Support() ? ShaderVersion::GL3 : ShaderVersion::GL2;
+    #endif
+
+        for (const ea::string& name : defineVec)
+            defines.push_back({ name });
+
+        const ea::string& newShaderCode = cache.GetShaderSource(resourceName, type_, shaderVersion, defines);
+        URHO3D_LOGINFO("{}", shaderCode.c_str());
+    }
 
     const char* shaderCStr = shaderCode.c_str();
     glShaderSource(object_.name_, 1, &shaderCStr, nullptr);

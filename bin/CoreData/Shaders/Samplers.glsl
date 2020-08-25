@@ -1,29 +1,31 @@
 #ifdef COMPILEPS
-UNIFORM_SAMPLER(0, sampler2D sDiffMap)
-UNIFORM_SAMPLER(0, samplerCube sDiffCubeMap)
-UNIFORM_SAMPLER(1, sampler2D sNormalMap)
-UNIFORM_SAMPLER(2, sampler2D sSpecMap)
-UNIFORM_SAMPLER(3, sampler2D sEmissiveMap)
-UNIFORM_SAMPLER(4, sampler2D sEnvMap)
-UNIFORM_SAMPLER(4, samplerCube sEnvCubeMap)
-UNIFORM_SAMPLER(8, sampler2D sLightRampMap)
-UNIFORM_SAMPLER(9, sampler2D sLightSpotMap)
-UNIFORM_SAMPLER(9, samplerCube sLightCubeMap)
+uniform sampler2D sDiffMap;
+uniform samplerCube sDiffCubeMap;
+uniform sampler2D sNormalMap;
+uniform sampler2D sSpecMap;
+uniform sampler2D sEmissiveMap;
+uniform sampler2D sEnvMap;
+uniform samplerCube sEnvCubeMap;
+uniform sampler2D sLightRampMap;
+uniform sampler2D sLightSpotMap;
+uniform samplerCube sLightCubeMap;
 #ifndef GL_ES
-    UNIFORM_SAMPLER(5, sampler3D sVolumeMap)
-    UNIFORM_SAMPLER(0, sampler2D sAlbedoBuffer)
-    UNIFORM_SAMPLER(1, sampler2D sNormalBuffer)
-    UNIFORM_SAMPLER(13, sampler2D sDepthBuffer)
-    UNIFORM_SAMPLER(14, sampler2D sLightBuffer)
+    uniform sampler3D sVolumeMap;
+    uniform sampler2D sAlbedoBuffer;
+    uniform sampler2D sNormalBuffer;
+    uniform sampler2D sDepthBuffer;
+    uniform sampler2D sLightBuffer;
     #ifdef VSM_SHADOW
-        UNIFORM_SAMPLER(10, sampler2D sShadowMap)
+        uniform sampler2D sShadowMap;
     #else
-        UNIFORM_SAMPLER(10, sampler2DShadow sShadowMap)
+        uniform sampler2DShadow sShadowMap;
     #endif
-    UNIFORM_SAMPLER(15, samplerCube sZoneCubeMap)
-    UNIFORM_SAMPLER(15, sampler3D sZoneVolumeMap)
+    uniform samplerCube sFaceSelectCubeMap;
+    uniform samplerCube sIndirectionCubeMap;
+    uniform samplerCube sZoneCubeMap;
+    uniform sampler3D sZoneVolumeMap;
 #else
-    UNIFORM_SAMPLER(10, highp sampler2D sShadowMap)
+    uniform highp sampler2D sShadowMap;
 #endif
 
 #ifdef GL3

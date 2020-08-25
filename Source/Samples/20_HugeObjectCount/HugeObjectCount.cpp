@@ -24,6 +24,7 @@
 #include <Urho3D/Core/Profiler.h>
 #include <Urho3D/Engine/Engine.h>
 #include <Urho3D/Graphics/Camera.h>
+#include <Urho3D/Graphics/CustomView.h>
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Model.h>
@@ -188,6 +189,7 @@ void HugeObjectCount::SetupViewport()
 
     // Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
     SharedPtr<Viewport> viewport(new Viewport(context_, scene_, cameraNode_->GetComponent<Camera>()));
+    viewport->SetCustomViewport(MakeShared<CustomViewportScript>(context_));
     renderer->SetViewport(0, viewport);
 }
 

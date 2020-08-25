@@ -122,7 +122,7 @@ target_include_directories(Urho3D PUBLIC
 
 if (NOT WEB AND NOT ANDROID)
     if (${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.16)
-        target_precompile_headers(Urho3D PRIVATE $<BUILD_INTERFACE:$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h>>)
+        #target_precompile_headers(Urho3D PRIVATE $<BUILD_INTERFACE:$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h>>)
     endif ()
 endif ()
 
@@ -155,6 +155,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/librevision.h)
 endif ()
 
 # Link dependencies
+# TODO(renderer): Make glslang and SPIRV optional
 set (THIRD_PARTY_DEPENDENCIES
     FreeType
     LZ4
@@ -186,6 +187,12 @@ set (THIRD_PARTY_DEPENDENCIES
     ETCPACK
     xatlas
     embree
+    glslang
+    SPIRV
+    spirv-cross-core
+    spirv-cross-glsl
+    spirv-cross-msl
+    spirv-cross-hlsl
 )
 
 if (URHO3D_MERGE_STATIC_LIBS)
