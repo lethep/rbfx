@@ -357,11 +357,11 @@ if (URHO3D_CSHARP)
             file (GLOB VS_SOLUTIONS ${rbfx_SOURCE_DIR}/*.sln)
         endif ()
     endif ()
-    add_msbuild_target(TARGET NugetRestore EXCLUDE_FROM_ALL ARGS ${VS_SOLUTIONS} /t:restore /m)
+    add_msbuild_target(TARGET NugetRestore EXCLUDE_FROM_ALL ARGS ${VS_SOLUTIONS} /t:restore)
     # Run nuget restore during generation stage
     message(STATUS "NuGet restore")
     execute_process(
-        COMMAND ${TERM_WORKAROUND} ${MSBUILD} ${VS_SOLUTIONS} /t:restore /m /nologo
+        COMMAND ${TERM_WORKAROUND} ${MSBUILD} ${VS_SOLUTIONS} /t:restore /nologo
         /p:CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}/ /consoleloggerparameters:ErrorsOnly
         RESULT_VARIABLE NUGET_RESTORE_RESULT
         OUTPUT_VARIABLE NUGET_RESTORE_OUTPUT
